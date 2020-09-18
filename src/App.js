@@ -1,24 +1,55 @@
-import React from 'react';
+import React, { useState } from 'react';
 import logo from './logo.svg';
 import './App.css';
 
+//Google Login
+import { GoogleLogin } from 'react-google-login';
+
+
 function App() {
+
+  const [name,setName] = useState('')
+  const [email,setEmail] = useState('')
+  const [fotoPerfil,setFotoPerfil] = useState('');
+  const [mostraDados, setmostraDados] = useState(false)
+
+
+
+  function responseGoogle(response){
+    console.log(response)
+    setName(response.profileObj.name)
+    setEmail(response.profileObj.email)
+    setFotoPerfil(response.profileObj.imageUrl);
+    setmostraDados(true);
+
+  }
+
+
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+      <h1>Login Google</h1>
+      <GoogleLogin
+        clientId="408235964246-ri6uh0o1s3rcpapk5hmo4htnstq57tq7.apps.googleusercontent.com"
+        buttonText="Login"
+        onSuccess={responseGoogle}
+        onFailure={responseGoogle}
+        cookiePolicy={'single_host_origin'}
+     />
+     <hr/>
+
+    {
+      mostraDados && (
+        <>
+          <p>Nome: {name}</p>
+          <p>E-mail:{email}</p>
+          <p>
+            <img src={fotoPerfil} alt={name} />
+          </p>
+        </>
+
+      )
+    }
+     
     </div>
   );
 }
